@@ -11,23 +11,23 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class SecondActivity extends AppCompatActivity {
 
-    private EditText jaEditNom, jaEditApe, jaEditN1, jaEditN2;
-    private Button jaBtnPasar, jaBtnSalir;
+    private EditText jaEtNom, jaEtApe, jaEtNum1, jaEtNum2;
+    private Button jaBtnPasarAV3, jaBtnFinalizar;
     
-    // Almacenamos todo en esta cadena: "Nombre*Apellido*Num1*Num2"
-    private String jaCadenaDatos = ""; 
+    // Variable única: "nom|||ape|||n1|||n2"
+    private String jaPaqueteGlobal = ""; 
 
     private final ActivityResultLauncher<Intent> jaLauncherV3 = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
-            jaResult -> {
-                if (jaResult.getResultCode() == RESULT_OK && jaResult.getData() != null) {
-                    jaCadenaDatos = jaResult.getData().getStringExtra("DATOS_JA");
+            jaResultado -> {
+                if (jaResultado.getResultCode() == RESULT_OK && jaResultado.getData() != null) {
+                    jaPaqueteGlobal = jaResultado.getData().getStringExtra("JA_CADENA_PROYECTO");
                     
-                    // Al volver de V3, habilitamos edición de Nombre y Apellido
-                    jaEditNom.setEnabled(true);
-                    jaEditApe.setEnabled(true);
+                    // Al retornar de V3, se habilitan los campos de nombre y apellido
+                    jaEtNom.setEnabled(true);
+                    jaEtApe.setEnabled(true);
 
-                    jaRefrescarCampos();
+                    jaPoblarCampos();
                 }
             }
     );
@@ -37,55 +37,60 @@ public class SecondActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
 
-        jaEditNom = findViewById(R.id.etNombre2);
-        jaEditApe = findViewById(R.id.etApellido2);
-        jaEditN1 = findViewById(R.id.etPrimerNumero2);
-        jaEditN2 = findViewById(R.id.etSegundoNumero2);
-        jaBtnPasar = findViewById(R.id.btnSiguiente2);
-        jaBtnSalir = findViewById(R.id.btnCerrar2);
+        jaEtNom = findViewById(R.id.etNombre2);
+        jaEtApe = findViewById(R.id.etApellido2);
+        jaEtNum1 = findViewById(R.id.etPrimerNumero2);
+        jaEtNum2 = findViewById(R.id.etSegundoNumero2);
+        jaBtnPasarAV3 = findViewById(R.id.btnSiguiente2);
+        jaBtnFinalizar = findViewById(R.id.btnCerrar2);
 
-        jaCadenaDatos = getIntent().getStringExtra("DATOS_JA");
-        jaRefrescarCampos();
+        // Bloqueados por defecto (o según XML)
+        jaEtNom.setEnabled(false);
+        jaEtApe.setEnabled(false);
+        jaEtNum1.setEnabled(false);
+        jaEtNum2.setEnabled(false);
 
-        jaBtnPasar.setOnClickListener(v -> {
-            // Guardamos lo que haya (aunque esté bloqueado al inicio)
-            jaCapturarInfo();
+        jaPaqueteGlobal = getIntent().getStringExtra("JA_CADENA_PROYECTO");
+        jaPoblarCampos();
+
+        jaBtnPasarAV3.setOnClickListener(v -> {
+            jaSincronizarCadena();
             Intent jaIntent = new Intent(this, ThirdActivity.class);
-            jaIntent.putExtra("DATOS_JA", jaCadenaDatos);
+            jaIntent.putExtra("JA_CADENA_PROYECTO", jaPaqueteGlobal);
             jaLauncherV3.launch(jaIntent);
         });
 
-        jaBtnSalir.setOnClickListener(v -> {
-            String jaN = jaEditNom.getText().toString().trim();
-            String jaA = jaEditApe.getText().toString().trim();
+        jaBtnFinalizar.setOnClickListener(v -> {
+            String jaN = jaEtNom.getText().toString().trim();
+            String jaA = jaEtApe.getText().toString().trim();
 
             if (jaN.isEmpty() || jaA.isEmpty()) {
-                Toast.makeText(this, "Debe ingresar Nombre y Apellido para cerrar", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Nombre y Apellido obligatorios para cerrar", Toast.LENGTH_SHORT).show();
             } else {
-                jaCapturarInfo();
-                Intent jaResIntent = new Intent();
-                jaResIntent.putExtra("DATOS_JA", jaCadenaDatos);
-                setResult(RESULT_OK, jaResIntent);
+                jaSincronizarCadena();
+                Intent jaIntentCierre = new Intent();
+                jaIntentCierre.putExtra("JA_CADENA_PROYECTO", jaPaqueteGlobal);
+                setResult(RESULT_OK, jaIntentCierre);
                 finish();
             }
         });
     }
 
-    private void jaCapturarInfo() {
-        String jaN = jaEditNom.getText().toString();
-        String jaA = jaEditApe.getText().toString();
-        String ja1 = jaEditN1.getText().toString();
-        String ja2 = jaEditN2.getText().toString();
-        jaCadenaDatos = jaN + "*" + jaA + "*" + ja1 + "*" + ja2;
+    private void jaSincronizarCadena() {
+        String jaN = jaEtNom.getText().toString();
+        String jaA = jaEtApe.getText().toString();
+        String ja1 = jaEtNum1.getText().toString();
+        String ja2 = jaEtNum2.getText().toString();
+        jaPaqueteGlobal = jaN + "|||" + jaA + "|||" + ja1 + "|||" + ja2;
     }
 
-    private void jaRefrescarCampos() {
-        if (jaCadenaDatos != null && jaCadenaDatos.contains("*")) {
-            String[] jaP = jaCadenaDatos.split("\\*");
-            if (jaP.length >= 1) jaEditNom.setText(jaP[0]);
-            if (jaP.length >= 2) jaEditApe.setText(jaP[1]);
-            if (jaP.length >= 3) jaEditN1.setText(jaP[2]);
-            if (jaP.length >= 4) jaEditN2.setText(jaP[3]);
+    private void jaPoblarCampos() {
+        if (jaPaqueteGlobal != null && jaPaqueteGlobal.contains("|||")) {
+            String[] jaDatos = jaPaqueteGlobal.split("\\|\\|\\|");
+            if (jaDatos.length >= 1) jaEtNom.setText(jaDatos[0]);
+            if (jaDatos.length >= 2) jaEtApe.setText(jaDatos[1]);
+            if (jaDatos.length >= 3) jaEtNum1.setText(jaDatos[2]);
+            if (jaDatos.length >= 4) jaEtNum2.setText(jaDatos[3]);
         }
     }
 }
