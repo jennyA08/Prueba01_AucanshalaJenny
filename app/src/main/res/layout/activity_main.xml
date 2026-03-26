@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Ventana 1" android:textSize="20sp" android:textStyle="bold"/>
+    <EditText android:id="@+id/etNombre" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Nombres" android:enabled="false"/>
+    <EditText android:id="@+id/etApellido" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Apellidos" android:enabled="false"/>
+    <EditText android:id="@+id/etPrimerNumero" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Primer Numero" android:enabled="false"/>
+    <EditText android:id="@+id/etSegundoNumero" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Segundo Numero" android:enabled="false"/>
+    <EditText android:id="@+id/etMultiplicacion" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Multiplicacion" android:enabled="false"/>
+    <EditText android:id="@+id/etPotencia" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Potencia" android:enabled="false"/>
+    <EditText android:id="@+id/etFactorial" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Factorial" android:enabled="false"/>
+
+    <Button android:id="@+id/btnSiguiente" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Siguiente"/>
+    <Button android:id="@+id/btnResultados" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Mostrar Resultados" android:enabled="false"/>
+</LinearLayout>

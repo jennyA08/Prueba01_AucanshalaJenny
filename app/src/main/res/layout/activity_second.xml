@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Ventana 2" android:textSize="20sp" android:textStyle="bold"/>
+    <EditText android:id="@+id/etNombre2" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Nombres" android:enabled="false"/>
+    <EditText android:id="@+id/etApellido2" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Apellidos" android:enabled="false"/>
+    <EditText android:id="@+id/etPrimerNumero2" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Primer Numero" android:enabled="false"/>
+    <EditText android:id="@+id/etSegundoNumero2" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Segundo Numero" android:enabled="false"/>
+
+    <Button android:id="@+id/btnSiguiente2" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Siguiente"/>
+    <Button android:id="@+id/btnCerrar2" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Cerrar"/>
+</LinearLayout>

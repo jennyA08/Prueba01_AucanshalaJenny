@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Ventana 3" android:textSize="20sp" android:textStyle="bold"/>
+    <EditText android:id="@+id/etNombre3" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Nombres" android:enabled="false"/>
+    <EditText android:id="@+id/etApellido3" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Apellidos" android:enabled="false"/>
+    <EditText android:id="@+id/etPrimerNumero3" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Primer Numero (Ingreso)" android:inputType="number"/>
+    <EditText android:id="@+id/etSegundoNumero3" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Segundo Numero (Ingreso)" android:inputType="number"/>
+
+    <Button android:id="@+id/btnCerrar3" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Cerrar"/>
+</LinearLayout>
