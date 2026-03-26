@@ -10,17 +10,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    private EditText etNombre, etApellido, etPrimerNumero, etSegundoNumero, etMultiplicacion, etPotencia, etFactorial;
-    private Button btnSiguiente, btnResultados;
+    private EditText jaEtNombre, jaEtApellido, jaEtNum1, jaEtNum2, jaEtProd, jaEtPot, jaEtFact;
+    private Button jaBtnPasar, jaBtnCalcular;
 
-    private String dataReceived = ""; // Formato: "nombre;apellido;n1;n2"
+    // Unica variable de transporte: "Nombre:::Apellido:::N1:::N2"
+    private String jaPaqueteUnico = ""; 
 
-    private final ActivityResultLauncher<Intent> launcher = registerForActivityResult(
+    private final ActivityResultLauncher<Intent> jaLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                    dataReceived = result.getData().getStringExtra("DATA");
-                    btnResultados.setEnabled(true);
+                    jaPaqueteUnico = result.getData().getStringExtra("JA_TRANSFER_DATA");
+                    jaBtnCalcular.setEnabled(true);
                 }
             }
     );
@@ -30,68 +31,74 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        etNombre = findViewById(R.id.etNombre);
-        etApellido = findViewById(R.id.etApellido);
-        etPrimerNumero = findViewById(R.id.etPrimerNumero);
-        etSegundoNumero = findViewById(R.id.etSegundoNumero);
-        etMultiplicacion = findViewById(R.id.etMultiplicacion);
-        etPotencia = findViewById(R.id.etPotencia);
-        etFactorial = findViewById(R.id.etFactorial);
-        btnSiguiente = findViewById(R.id.btnSiguiente);
-        btnResultados = findViewById(R.id.btnResultados);
+        jaEtNombre = findViewById(R.id.etNombre);
+        jaEtApellido = findViewById(R.id.etApellido);
+        jaEtN1 = findViewById(R.id.etPrimerNumero);
+        jaEtN2 = findViewById(R.id.etSegundoNumero);
+        jaEtMult = findViewById(R.id.etMultiplicacion); // Assuming XML IDs match or I should adjust
+        jaEtPot = findViewById(R.id.etPotencia);
+        jaEtFact = findViewById(R.id.etFactorial);
+        
+        // Let's re-map based on the activity_main.xml I saw earlier
+        jaEtNombre = findViewById(R.id.etNombre);
+        jaEtApellido = findViewById(R.id.etApellido);
+        jaEtNum1 = findViewById(R.id.etPrimerNumero);
+        jaEtNum2 = findViewById(R.id.etSegundoNumero);
+        jaEtProd = findViewById(R.id.etMultiplicacion);
+        jaEtPot = findViewById(R.id.etPotencia);
+        jaEtFact = findViewById(R.id.etFactorial);
+        jaBtnPasar = findViewById(R.id.btnSiguiente);
+        jaBtnCalcular = findViewById(R.id.btnResultados);
 
-        btnSiguiente.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, SecondActivity.class);
-            // Pasamos la variable única (incluso si está vacía inicialmente)
-            intent.putExtra("DATA", dataReceived);
-            launcher.launch(intent);
+        jaBtnPasar.setOnClickListener(v -> {
+            Intent intent = new Intent(this, SecondActivity.class);
+            intent.putExtra("JA_TRANSFER_DATA", jaPaqueteUnico);
+            jaLauncher.launch(intent);
         });
 
-        btnResultados.setOnClickListener(v -> {
-            if (dataReceived != null && !dataReceived.isEmpty()) {
-                String[] parts = dataReceived.split(";");
-                if (parts.length >= 4) {
-                    String nombre = parts[0];
-                    String apellido = parts[1];
-                    int n1 = Integer.parseInt(parts[2]);
-                    int n2 = Integer.parseInt(parts[3]);
+        jaBtnCalcular.setOnClickListener(v -> {
+            if (jaPaqueteUnico != null && jaPaqueteUnico.contains(":::")) {
+                String[] jaPartes = jaPaqueteUnico.split(":::");
+                if (jaPartes.length >= 4) {
+                    jaEtNombre.setText(jaPartes[0]);
+                    jaEtApellido.setText(jaPartes[1]);
+                    jaEtNum1.setText(jaPartes[2]);
+                    jaEtNum2.setText(jaPartes[3]);
 
-                    etNombre.setText(nombre);
-                    etApellido.setText(apellido);
-                    etPrimerNumero.setText(String.valueOf(n1));
-                    etSegundoNumero.setText(String.valueOf(n2));
+                    int jaV1 = Integer.parseInt(jaPartes[2]);
+                    int jaV2 = Integer.parseInt(jaPartes[3]);
 
-                    etMultiplicacion.setText(String.valueOf(multiplicar(n1, n2)));
-                    etPotencia.setText(String.valueOf(potencia(n1, n2)));
-                    etFactorial.setText(String.valueOf(factorial(n1)));
+                    jaEtProd.setText(String.valueOf(jaSumaProd(jaV1, jaV2)));
+                    jaEtPot.setText(String.valueOf(jaSumaPot(jaV1, jaV2)));
+                    jaEtFact.setText(String.valueOf(jaSumaFact(jaV1)));
                 }
             }
         });
     }
 
-    private int multiplicar(int a, int b) {
-        int res = 0;
+    private int jaSumaProd(int a, int b) {
+        int jaRes = 0;
         for (int i = 0; i < b; i++) {
-            res += a;
+            jaRes += a;
         }
-        return res;
+        return jaRes;
     }
 
-    private int potencia(int a, int b) {
-        if (b == 0) return 1;
-        int res = a;
-        for (int i = 1; i < b; i++) {
-            res = multiplicar(res, a);
+    private int jaSumaPot(int b, int e) {
+        if (e == 0) return 1;
+        int jaRes = b;
+        for (int i = 1; i < e; i++) {
+            jaRes = jaSumaProd(jaRes, b);
         }
-        return res;
+        return jaRes;
     }
 
-    private int factorial(int a) {
-        if (a <= 0) return 1;
-        int res = 1;
-        for (int i = 1; i <= a; i++) {
-            res = multiplicar(res, i);
+    private int jaSumaFact(int n) {
+        if (n <= 0) return 1;
+        int jaRes = 1;
+        for (int i = 1; i <= n; i++) {
+            jaRes = jaSumaProd(jaRes, i);
         }
-        return res;
+        return jaRes;
     }
 }
